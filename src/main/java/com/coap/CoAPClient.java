@@ -32,15 +32,23 @@ public class CoAPClient {
         uri = new URI("localhost:5683/file");  //创建一个资源请求hello资源，注意默认端口为5683
         CoapClient client = new CoapClient(uri);
         CoapResponse response = client.get();
+        System.out.println("==" + response);
         if(response != null) {
+            System.out.println("----");
             byte[] out = response.getPayload();
-            File file = new File("D:\\test\\coap.mp4");
+            File file = new File("D:\\test\\coap.jpg");
 
             OutputStream outputStream = new FileOutputStream(file);
             outputStream.write(out);
             System.out.println("wancheng");
 //            System.out.println(prettyPrint(response));  //打印格式良好的输出
         }
+
+        uri = new URI("localhost:5683/hello");  //创建一个资源请求hello资源，注意默认端口为5683
+        CoapClient client1 = new CoapClient(uri);
+        CoapResponse response1 = client1.get();
+        System.out.println("=-=" + response1);
+
     }
 
 

@@ -25,6 +25,14 @@ public class CoAPUtil {
      *      入参 （数据处理规则）
      */
 
+    /**
+     * 暴漏接口
+     * 1、创建一个server
+     * 2、为server添加一个channel
+     * 3、启动server
+     *
+     * 此外， 4、为某channel指定规则。
+     */
     public static void createServer() {
 
     }
