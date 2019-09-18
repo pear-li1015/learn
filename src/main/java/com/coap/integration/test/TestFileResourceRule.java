@@ -20,6 +20,7 @@ public class TestFileResourceRule extends ResourceRule {
      *          payload将被放置与响应体的 payload部分
      *          format类似文件的mine类型  取值参见 {@link MediaTypeRegistry} 类
      */
+    // TODO 添加请求的 mime类型
     @Override
     public ResourceContent setRule(String resourceName, byte[] requestPayload) {
         File file = new File("D:\\test\\file.jpg");
