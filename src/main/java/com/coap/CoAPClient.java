@@ -44,10 +44,10 @@ public class CoAPClient {
 //            System.out.println(prettyPrint(response));  //打印格式良好的输出
         }
 
-        uri = new URI("localhost:5683/hello");  //创建一个资源请求hello资源，注意默认端口为5683
-        CoapClient client1 = new CoapClient(uri);
-        CoapResponse response1 = client1.get();
-        System.out.println("=-=" + response1);
+//        uri = new URI("localhost:5684/hello");  //创建一个资源请求hello资源，注意默认端口为5683
+//        CoapClient client1 = new CoapClient(uri);
+//        CoapResponse response1 = client1.get();
+//        System.out.println("=-=" + response1);
 
     }
 
