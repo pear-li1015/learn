@@ -36,8 +36,10 @@ public class CoAPResource extends CoapResource {
 
 //        String payload = bytesToString(request.getPayload());
         byte[] payload = request.getPayload();
+        // client发送的内容的格式
+        int format = request.getOptions().getContentFormat();
         // 将 payload 从此传入。
-        Response response = rule.getResponse(this.getName(), payload);
+        Response response = rule.getResponse(this.getName(), payload, format);
         // 检查配置文件中限制的 单次文件传输的最大值
         long maxLength = Long.parseLong(NetworkConfig.Keys.MAX_RESOURCE_BODY_SIZE);
         if (response.getPayload().length > maxLength) {
@@ -57,9 +59,10 @@ public class CoAPResource extends CoapResource {
         // 从请求体中拿到 payload
 //        String payload = request.getPayloadString();
         byte[] payload = request.getPayload();
-
+        // client发送的内容的格式
+        int format = request.getOptions().getContentFormat();
         // 根据用户配置的规则，得到响应内容
-        Response response = rule.getResponse(this.getName(), payload);
+        Response response = rule.getResponse(this.getName(), payload, format);
 
         // 检查配置文件中限制的 单次文件传输的最大值
         // TODO 检查 为什么使用下面这行会报错。

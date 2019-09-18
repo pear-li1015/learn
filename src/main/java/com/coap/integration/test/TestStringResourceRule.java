@@ -20,9 +20,12 @@ public class TestStringResourceRule extends ResourceRule {
      *          format类似文件的mine类型  取值参见 {@link MediaTypeRegistry} 类
      */
     @Override
-    public ResourceContent setRule(String resourceName, byte[] requestPayload) {
+    public ResourceContent setRule(String resourceName, byte[] requestPayload, int format) {
+        System.out.println("用户根据 资源的名称、client携带的内容、携带内容的格式" +
+                "给出相应的返回结果，可以回传文件，也可以返回字符串。 ");
         System.out.println("resourceName: " + resourceName);
         System.out.println("requestPayload: " + requestPayload);
+        System.out.println("format: " + format);
 
         byte[] payload = "transFileToBytes(file)".getBytes();
         return new ResourceContent(payload, MediaTypeRegistry.TEXT_PLAIN);

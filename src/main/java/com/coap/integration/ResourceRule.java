@@ -15,7 +15,7 @@ public abstract class ResourceRule {
      * @param resourceName
      * @return
      */
-    public abstract ResourceContent setRule(String resourceName, byte[] requestPayload);
+    public abstract ResourceContent setRule(String resourceName, byte[] requestPayload, int format);
 
     /**
      * 通过 为 resource指定的名称， 根据重写的 规则，返回Response，准备发往 client
@@ -24,9 +24,9 @@ public abstract class ResourceRule {
      * @param requestPayload
      * @return
      */
-    public Response getResponse(String resourceName, byte[] requestPayload) {
+    public Response getResponse(String resourceName, byte[] requestPayload, int format) {
         // 调用用户定义的规则，返回传输内容和类型
-        ResourceContent content = setRule(resourceName, requestPayload);
+        ResourceContent content = setRule(resourceName, requestPayload, format);
         // 创建响应
         Response response = new Response(CoAP.ResponseCode.CONTENT);
         // 设置响应的内容

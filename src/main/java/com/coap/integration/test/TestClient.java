@@ -17,10 +17,10 @@ public class TestClient {
      */
 
     public static void main(String[] args) throws Exception {
-//        stringTransTest();
+        stringTransTest();
 //        fileTransTest();
 
-        postFileTransTest();
+//        postFileTransTest();
 
 
     }

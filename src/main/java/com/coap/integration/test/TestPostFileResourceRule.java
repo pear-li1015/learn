@@ -20,7 +20,7 @@ public class TestPostFileResourceRule extends ResourceRule {
      *          format类似文件的mine类型  取值参见 {@link MediaTypeRegistry} 类
      */
     @Override
-    public ResourceContent setRule(String resourceName, byte[] requestPayload) {
+    public ResourceContent setRule(String resourceName, byte[] requestPayload, int format) {
         System.out.println("resourceName: " + resourceName);
 //        System.out.println("requestPayload: " + requestPayload);
 
