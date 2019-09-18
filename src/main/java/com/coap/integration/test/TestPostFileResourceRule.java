@@ -20,14 +20,15 @@ public class TestPostFileResourceRule extends ResourceRule {
      *          format类似文件的mine类型  取值参见 {@link MediaTypeRegistry} 类
      */
     @Override
-    public ResourceContent setRule(String resourceName, String requestPayload) {
+    public ResourceContent setRule(String resourceName, byte[] requestPayload) {
         System.out.println("resourceName: " + resourceName);
-        System.out.println("requestPayload: " + requestPayload);
+//        System.out.println("requestPayload: " + requestPayload);
 
-        File file = new File("D:\\test\\postFile.txt");
+//        File file = new File("D:\\test\\postFile.txt");
+        File file = new File("D:\\test\\postFile.mp4");
         try {
             OutputStream outputStream = new FileOutputStream(file);
-            outputStream.write(requestPayload.getBytes());
+            outputStream.write(requestPayload);
             outputStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

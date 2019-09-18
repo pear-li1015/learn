@@ -34,7 +34,8 @@ public class CoAPResource extends CoapResource {
         Request request = exchange.advanced().getRequest();
 
 
-        String payload = bytesToString(request.getPayload());
+//        String payload = bytesToString(request.getPayload());
+        byte[] payload = request.getPayload();
         // 将 payload 从此传入。
         Response response = rule.getResponse(this.getName(), payload);
         // 检查配置文件中限制的 单次文件传输的最大值
@@ -54,7 +55,8 @@ public class CoAPResource extends CoapResource {
         Request request = exchange.getRequest();
 
         // 从请求体中拿到 payload
-        String payload = request.getPayloadString();
+//        String payload = request.getPayloadString();
+        byte[] payload = request.getPayload();
 
         // 根据用户配置的规则，得到响应内容
         Response response = rule.getResponse(this.getName(), payload);

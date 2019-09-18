@@ -84,7 +84,8 @@ public class TestClient {
 
 
     private static byte[] postFileTest() throws IOException {
-        File file = new File("D:\\test\\myfile.txt");
+//        File file = new File("D:\\test\\myfile.txt");
+        File file = new File("D:\\test\\testvideo.mp4");
         InputStream inputStream = new FileInputStream(file);
 
         byte[] bytes = new byte[(int)file.length()];

@@ -21,7 +21,7 @@ public class TestFileResourceRule extends ResourceRule {
      *          format类似文件的mine类型  取值参见 {@link MediaTypeRegistry} 类
      */
     @Override
-    public ResourceContent setRule(String resourceName, String requestPayload) {
+    public ResourceContent setRule(String resourceName, byte[] requestPayload) {
         File file = new File("D:\\test\\file.jpg");
         byte[] payload = transFileToBytes(file);
         return new ResourceContent(payload, MediaTypeRegistry.IMAGE_JPEG);
