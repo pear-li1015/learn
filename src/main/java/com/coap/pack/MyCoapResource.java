@@ -19,7 +19,6 @@ import java.lang.reflect.Method;
  * @Description:
  */
 public class MyCoapResource extends CoapResource {
-    // TODO 这里修改为 ResourceRule
     private Class clazz;
     private MyCoapResource(String name) {
         super(name);

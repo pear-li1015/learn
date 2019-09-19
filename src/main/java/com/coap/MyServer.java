@@ -25,7 +25,6 @@ public class MyServer extends CoapServer {
     }
 
     public void addResource(String name, Class clazz) {
-        // TODO ...
 //        if (!clazz.isInstance(ResourceRule.class)) {
 //            System.out.println("规则必须实现 ResourceRule 抽象类");
 //            return;

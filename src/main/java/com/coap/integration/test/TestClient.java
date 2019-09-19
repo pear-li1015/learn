@@ -2,112 +2,69 @@ package com.coap.integration.test;
 
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
-import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
-import org.eclipse.californium.core.coap.Request;
+
 
 import java.io.*;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 public class TestClient {
     /**
      * 1、向服务端发送字符串
      * 2、向服务端发送文件，并接收服务端文件
+     * mediaType 祥参 #{@link MediaTypeRegistry}
      */
 
     public static void main(String[] args) throws Exception {
-        stringTransTest();
-//        fileTransTest();
-
-//        postFileTransTest();
-
+        strTest();
+        System.out.println("-------------分割线--------------");
+        fileTest();
 
     }
-
 
     /**
-     * 向指定接口发送post请求
-     * @param uri 格式 “localhost:5673/file”
-     * @param payload
-     * @param mediaType 祥参 #{@link MediaTypeRegistry}
-     * @return
-     * @throws Exception
+     * 向指定接口发送字符串 ，并接收返回的字符串
      */
-    private static CoapResponse transTest(String uri, byte[] payload, int mediaType) throws Exception {
+    private static void strTest() throws Exception {
 
-        CoapClient client = new CoapClient(new URI(uri));
-        CoapResponse response = client.post(payload, mediaType);
+        CoapClient client = new CoapClient(new URI("localhost:5683/string"));
+        CoapResponse response = client.post("payload from client", MediaTypeRegistry.TEXT_PLAIN);
+
         if (response != null) {
-            System.out.println(" response1.isSuccess() " + response.isSuccess());
-
-            System.out.println("response text " + response.getResponseText());
-        }
-
-        return response;
-    }
-
-    private static CoapResponse transTest(String uri, String payload, int mediaType) throws Exception {
-        return transTest(uri, payload.getBytes(), mediaType);
-    }
-
-    private static void stringTransTest()  throws Exception {
-
-        CoapResponse response1 = transTest("localhost:5683/string", "payload from request", MediaTypeRegistry.TEXT_PLAIN);
-
-        System.out.println(" response1.isSuccess() " + response1.isSuccess());
-
-        System.out.println("response text " + response1.getResponseText());
-    }
-
-    private static void fileTransTest() throws Exception {
-        CoapResponse response = transTest("localhost:5683/file", "payload from request", MediaTypeRegistry.TEXT_PLAIN);
-
-        System.out.println(" response1.isSuccess() " + response.isSuccess());
-
-        System.out.println("response text " + response.getResponseText());
-        System.out.println("==" + response);
-        if(response != null) {
-            saveFileTest(response, "D:\\test\\coap.jpg");
+            System.out.println("response text: " + response.getResponseText());
+            if (response.getOptions().getContentFormat() == MediaTypeRegistry.TEXT_PLAIN) {
+                System.out.println("response contentFormat == TEXT_PLAIN");
+            }
         }
     }
+    /**
+     * 向指定接口发送文件，并保存 返回的文件
+     */
+    private static void fileTest() throws Exception {
+        CoapClient client = new CoapClient(new URI("localhost:5683/file"));
+        File inFile = new File("D:\\test\\file.jpg");
+        InputStream inputStream = new FileInputStream(inFile);
+        byte[] inFileBytes = new byte[(int) inFile.length()];
+        if (inFile.length() == inFileBytes.length) {
+            System.out.println("inFileBytes == inFile.length()");
+            inputStream.read(inFileBytes);
+            inputStream.close();
+            CoapResponse response = client.post(inFileBytes, MediaTypeRegistry.IMAGE_JPEG);
 
-    private static void saveFileTest(CoapResponse response, String filePath) throws Exception {
-        int contentFormat = response.advanced().getOptions().getContentFormat();
-        System.out.println("contentFormat " + contentFormat);
-
-        File file = new File(filePath);
-        OutputStream outputStream = new FileOutputStream(file);
-        outputStream.write(response.getPayload());
-        System.out.println("finish");
-    }
-
-
-    private static byte[] postFileTest() throws IOException {
-//        File file = new File("D:\\test\\myfile.txt");
-        File file = new File("D:\\test\\testvideo.mp4");
-        InputStream inputStream = new FileInputStream(file);
-
-        byte[] bytes = new byte[(int)file.length()];
-
-        if (bytes.length != file.length()) {
-            System.out.println("文件过大。");
+            if (response != null) {
+                System.out.println("response code: " + response.getCode());
+                byte[] outFileBytes = response.getPayload();
+                if (response.getOptions().getContentFormat() == MediaTypeRegistry.IMAGE_JPEG) {
+                    System.out.println("返回的文件后缀为 .jpg");
+                }
+                File outFile = new File("D:\\test\\c.jpg");
+                OutputStream outputStream = new FileOutputStream(outFile);
+                outputStream.write(outFileBytes);
+                outputStream.close();
+            }
         }
-        inputStream.read(bytes);
-        return bytes;
     }
 
-    private static void postFileTransTest() throws Exception {
 
-        CoapResponse response = transTest("localhost:5683/postfile", postFileTest(), MediaTypeRegistry.TEXT_PLAIN);
-
-        System.out.println(" response1.isSuccess() " + response.isSuccess());
-
-        System.out.println("response text " + response.getResponseText());
-        System.out.println("==" + response);
-//        if(response != null) {
-//            saveFileTest(response, "D:\\test\\coap.jpg");
-//        }
-    }
 
 }

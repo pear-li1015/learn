@@ -8,11 +8,31 @@ import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.core.coap.Response;
 import org.eclipse.californium.core.network.Exchange;
 import org.eclipse.californium.core.network.config.NetworkConfig;
+import org.eclipse.californium.core.network.config.NetworkConfigDefaultHandler;
 import org.eclipse.californium.core.server.resources.CoapExchange;
+
+import java.io.File;
 
 
 public class CoAPResource extends CoapResource {
 
+
+    private static final File CONFIG_FILE = new File("Californium.properties");
+    private static final String CONFIG_HEADER = "Californium CoAP Properties file for Fileserver";
+    private static final int DEFAULT_MAX_RESOURCE_SIZE = 2 * 1024 * 1024; // 2 MB
+    private static final int DEFAULT_BLOCK_SIZE = 512;
+
+    private static NetworkConfigDefaultHandler DEFAULTS = new NetworkConfigDefaultHandler() {
+
+        @Override
+        public void applyDefaults(NetworkConfig config) {
+            config.setInt(NetworkConfig.Keys.MAX_RESOURCE_BODY_SIZE, DEFAULT_MAX_RESOURCE_SIZE);
+            config.setInt(NetworkConfig.Keys.MAX_MESSAGE_SIZE, DEFAULT_BLOCK_SIZE);
+            config.setInt(NetworkConfig.Keys.PREFERRED_BLOCK_SIZE, DEFAULT_BLOCK_SIZE);
+        }
+    };
+
+    private final NetworkConfig config = NetworkConfig.createWithFile(CONFIG_FILE, CONFIG_HEADER, DEFAULTS);
     private ResourceRule rule;
     private CoAPResource(String name) {
         super(name);
@@ -65,9 +85,7 @@ public class CoAPResource extends CoapResource {
         Response response = rule.getResponse(this.getName(), payload, format);
 
         // 检查配置文件中限制的 单次文件传输的最大值
-        // TODO 检查 为什么使用下面这行会报错。
-//        long maxLength = Long.parseLong(NetworkConfig.Keys.MAX_RESOURCE_BODY_SIZE);
-        long maxLength = 30011041;
+        int maxLength = config.getInt(NetworkConfig.Keys.MAX_RESOURCE_BODY_SIZE);
         // 如果响应的长度 超出了单次传输的限制
         if (response.getPayload().length > maxLength) {
             System.out.println("file " + " is too large " + response.getPayload().length  + " max: " + maxLength);

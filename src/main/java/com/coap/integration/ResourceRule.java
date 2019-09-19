@@ -25,8 +25,10 @@ public abstract class ResourceRule {
      * @return
      */
     public Response getResponse(String resourceName, byte[] requestPayload, int format) {
+        System.out.println("start user rule at " + resourceName);
         // 调用用户定义的规则，返回传输内容和类型
         ResourceContent content = setRule(resourceName, requestPayload, format);
+        System.out.println("end user rule at " + resourceName);
         // 创建响应
         Response response = new Response(CoAP.ResponseCode.CONTENT);
         // 设置响应的内容

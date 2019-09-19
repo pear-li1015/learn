@@ -16,34 +16,40 @@ public class TestFileResourceRule extends ResourceRule {
      * 用户重写此方法，用于指定请求结果的返回规则
      * @param resourceName 请求 resource的名称， 用户添加resource时定义的 name
      * @param requestPayload client 请求体中的 payload
-     * @param format requestContentType
+     * @param format client携带的payload的类型，类似文件的mine类型  取值参见 {@link MediaTypeRegistry} 类
      * @return 结果的一种封装，包含byte[]类型的payload 和 int类型的format
      *          payload将被放置与响应体的 payload部分
-     *          format类似文件的mine类型  取值参见 {@link MediaTypeRegistry} 类
      */
-    // TODO 添加请求的 mime类型
     @Override
     public ResourceContent setRule(String resourceName, byte[] requestPayload, int format) {
-        File file = new File("D:\\test\\file.jpg");
-        byte[] payload = transFileToBytes(file);
-        return new ResourceContent(payload, MediaTypeRegistry.IMAGE_JPEG);
-//        return new ResourceContent(payload, MediaTypeRegistry.APPLICATION_OCTET_STREAM);
-    }
-
-    private byte[] transFileToBytes(File file) {
-        InputStream in = null;
-        byte[] content = new byte[(int) file.length()];
         try {
-            in = new FileInputStream(file);
-            int r = in.read(content);
-            // 这里 r 应该 等于 file.length()
-        } catch (FileNotFoundException e) {
+            return setRuleImpl(resourceName, requestPayload, format);
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            return content;
+            return new ResourceContent(new byte[10], MediaTypeRegistry.UNDEFINED);
         }
-
     }
+
+    private ResourceContent setRuleImpl(String resourceName, byte[] requestPayload, int format) throws Exception {
+        // 从byte[]写出到磁盘
+        if (format == MediaTypeRegistry.IMAGE_JPEG) {
+            System.out.println("输入文件的后缀为 .jpg");
+        }
+        File outFile = new File("D:\\test\\b.jpg");
+        OutputStream outputStream = new FileOutputStream(outFile);
+        outputStream.write(requestPayload);
+        outputStream.close();
+        // 从磁盘 写入到byte[]
+        File inFile = new File("D:\\test\\file.jpg");
+        byte[] inFileBytes = new byte[(int) inFile.length()];
+        // byte[] 只能存放 int， 而inFile.length 是long， 存在越界的危险
+        if (inFile.length() == inFileBytes.length) {
+            InputStream inputStream = new FileInputStream(inFile);
+            inputStream.read(inFileBytes);
+            inputStream.close();
+        }
+        // 返回结果(此次传输的内容 byte[], 此次传输内容的类型 类似mime)
+        return new ResourceContent(inFileBytes, MediaTypeRegistry.IMAGE_JPEG);
+    }
+
 }
