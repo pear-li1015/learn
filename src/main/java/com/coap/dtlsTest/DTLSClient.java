@@ -1,4 +1,4 @@
-package com.coap.dtls;
+package com.coap.dtlsTest;
 
 /**
  * @Author: bin
@@ -20,9 +20,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.californium.elements.AddressEndpointContext;
-import org.eclipse.californium.elements.RawData;
-import org.eclipse.californium.elements.RawDataChannel;
+import org.eclipse.californium.elements.*;
 import org.eclipse.californium.elements.util.DaemonThreadFactory;
 import org.eclipse.californium.elements.util.SslContextUtil;
 import org.eclipse.californium.scandium.DTLSConnector;
@@ -32,11 +30,11 @@ import org.eclipse.californium.scandium.dtls.pskstore.StaticPskStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExampleDTLSClient {
+public class DTLSClient {
 
     private static final int DEFAULT_PORT = 5684;
     private static final long DEFAULT_TIMEOUT_NANOS = TimeUnit.MILLISECONDS.toNanos(10000);
-    private static final Logger LOG = LoggerFactory.getLogger(ExampleDTLSClient.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(com.coap.dtlsTest.DTLSClient.class.getName());
     private static final char[] KEY_STORE_PASSWORD = "endPass".toCharArray();
     private static final String KEY_STORE_LOCATION = "certs/keyStore.jks";
     private static final char[] TRUST_STORE_PASSWORD = "rootPass".toCharArray();
@@ -50,7 +48,7 @@ public class ExampleDTLSClient {
     private DTLSConnector dtlsConnector;
     private AtomicInteger clientMessageCounter = new AtomicInteger();
 
-    public ExampleDTLSClient() {
+    public DTLSClient() {
         try {
             // load key store
             SslContextUtil.Credentials clientCredentials = SslContextUtil.loadCredentials(
@@ -93,7 +91,36 @@ public class ExampleDTLSClient {
         if (0 < c) {
             clientMessageCounter.incrementAndGet();
             try {
-                RawData data = RawData.outbound((payload + c + ".").getBytes(), raw.getEndpointContext(), null, false);
+                RawData data = RawData.outbound((payload + c + ".").getBytes(), raw.getEndpointContext(), new MessageCallback() {
+                    @Override
+                    public void onConnecting() {
+
+                        System.out.println("-----receive-------onConnecting-------------");
+                    }
+
+                    @Override
+                    public void onDtlsRetransmission(int flight) {
+
+                        System.out.println("---receive---------onDtlsRetransmission-------------");
+                    }
+
+                    @Override
+                    public void onContextEstablished(EndpointContext context) {
+                        System.out.println("------receive------onContextEstablished-------------");
+                    }
+
+                    @Override
+                    public void onSent() {
+
+                        System.out.println("-------receive-----onSent-------------");
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                        System.out.println("----receive--------onError-------------");
+                    }
+                }, false);
                 dtlsConnector.send(data);
             } catch (IllegalStateException e) {
                 LOG.debug("send failed after {} messages", (c - 1), e);
@@ -114,7 +141,36 @@ public class ExampleDTLSClient {
     }
 
     private void startTest(InetSocketAddress peer) {
-        RawData data = RawData.outbound(payload.getBytes(), new AddressEndpointContext(peer), null, false);
+        RawData data = RawData.outbound(payload.getBytes(), new AddressEndpointContext(peer), new MessageCallback() {
+            @Override
+            public void onConnecting() {
+
+                System.out.println("-----startTest-------onConnecting-------------");
+            }
+
+            @Override
+            public void onDtlsRetransmission(int flight) {
+
+                System.out.println("-----startTest-------onDtlsRetransmission-------------");
+            }
+
+            @Override
+            public void onContextEstablished(EndpointContext context) {
+                System.out.println("------startTest------onContextEstablished-------------");
+            }
+
+            @Override
+            public void onSent() {
+
+                System.out.println("-------startTest-----onSent-------------");
+            }
+
+            @Override
+            public void onError(Throwable error) {
+
+                System.out.println("-----startTest-------onError-------------");
+            }
+        }, false);
         dtlsConnector.send(data);
     }
 
@@ -126,112 +182,59 @@ public class ExampleDTLSClient {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        System.out.println(Math.round((Math.random() * 100) % 6));
         int clients = 1;
         int messages = 1;
-//        int length = 64;
-//        if (0 < args.length) {
-//            clients = Integer.parseInt(args[0]);
-//            if (1 < args.length) {
-//                messages = Integer.parseInt(args[1]);
-//                if (2 < args.length) {
-//                    length = Integer.parseInt(args[2]);
-//                }
-//            }
-//        }
         int maxMessages = (messages * clients);
         messageCounter = new CountDownLatch(maxMessages);
-//        while (payload.length() < length) {
-//            payload += payload;
-//        }
-//        payload = payload.substring(0, length);
-
-        List<ExampleDTLSClient> clientList = new ArrayList<>(clients);
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
-                new DaemonThreadFactory("Aux#"));
 
         System.out.println("Create " + clients + " DTLS example clients, expect to send " + maxMessages +" messages overall.");
 
-//        final CountDownLatch start = new CountDownLatch(clients);
 
 
-        // Create & start clients
-//        for (int index = 0; index < clients; ++index) {
-            final ExampleDTLSClient client = new ExampleDTLSClient();
-//            clientList.add(client);
+        final com.coap.dtlsTest.DTLSClient client = new com.coap.dtlsTest.DTLSClient();
         client.start();
-//        start.countDown();
-//            executor.execute(new Runnable() {
-//
-//                @Override
-//                public void run() {
-//                    client.start();
-//                    start.countDown();
-//                }
-//            });
-//        }
-//        start.await();
         System.out.println(clients + " DTLS example clients started.");
 
         // Get peer address
         InetSocketAddress peer;
-        if (args.length == 5) {
-            peer = new InetSocketAddress(args[3], Integer.parseInt(args[4]));
-        } else {
-            peer = new InetSocketAddress(InetAddress.getLoopbackAddress(), DEFAULT_PORT);
-        }
-
-        // Start Test
-        long nanos = System.nanoTime();
-        long lastMessageCountDown = messageCounter.getCount();
-
-//        for (ExampleDTLSClient client : clientList) {
-            client.startTest(peer);
+//        if (args.length == 5) {
+//            peer = new InetSocketAddress(args[3], Integer.parseInt(args[4]));
+//        } else {
+//            peer = new InetSocketAddress(InetAddress.getLoopbackAddress(), DEFAULT_PORT);
+            peer = new InetSocketAddress("localhost", DEFAULT_PORT);
+        System.out.println(InetAddress.getLoopbackAddress().getHostAddress() + DEFAULT_PORT);
 //        }
 
+        // Start Test
+        long lastMessageCountDown = messageCounter.getCount();
+
+        client.startTest(peer);
         // Wait with timeout or all messages send.
+        // 这里实际上是在等待别的线程完成通信并打印log,
+        // 如果 sleep 也可以
         while (!messageCounter.await(DEFAULT_TIMEOUT_NANOS, TimeUnit.NANOSECONDS)) {
             long current = messageCounter.getCount();
             if (lastMessageCountDown == current && current < maxMessages) {
                 // no new messages, clients are stale
                 // adjust start time with timeout
-                nanos += DEFAULT_TIMEOUT_NANOS;
                 break;
             }
             lastMessageCountDown = current;
         }
-        long count = maxMessages - messageCounter.getCount();
-        nanos = System.nanoTime() - nanos;
 
+        Thread.sleep(5000);
         System.out.println(clients + " DTLS example clients finished.");
 
-        int statistic[] = new int[clients];
-        for (int index = 0; index < clients; ++index) {
-//            ExampleDTLSClient client = clientList.get(index);
-            statistic[index] = client.stop();
+//        int statistic[] = new int[clients];
+//        for (int index = 0; index < clients; ++index) {
+//            statistic[index] = client.stop();
+//        }
+        try {
+            for (;;) {
+                Thread.sleep(5000);
+            }
+        } catch (InterruptedException e) {
         }
-
-//        System.out.println(count + " messages received, " + (maxMessages) + " expected");
-//        System.out.println(count + " messages in " + TimeUnit.NANOSECONDS.toMillis(nanos) + " ms");
-//        System.out.println((count * 1000) / TimeUnit.NANOSECONDS.toMillis(nanos) + " messages per s");
-//        if (count < maxMessages) {
-//            System.out.println("Stale at " + lastMessageCountDown + " messages");
-//        }
-//        if (1 < clients) {
-//            Arrays.sort(statistic);
-//            int grouped = 10;
-//            int last = 0;
-//            for (int index = 1; index < clients; ++index) {
-//                if ((statistic[index] / grouped) > (statistic[last] / grouped)) {
-//                    if (statistic[index-1] == statistic[last]) {
-//                        System.out.println((index - last) + " clients with " + statistic[last] + " messages.");
-//                    }
-//                    else {
-//                        System.out.println((index - last) + " clients with " + statistic[last] + " to " + statistic[index-1] + " messages.");
-//                    }
-//                    last = index;
-//                }
-//            }
-//            System.out.println((clients - last) + " clients with " + statistic[last] + " to " + statistic[clients-1] + " messages.");
-//        }
     }
 }

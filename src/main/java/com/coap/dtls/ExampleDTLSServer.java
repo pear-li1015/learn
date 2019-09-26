@@ -59,6 +59,7 @@ public class ExampleDTLSServer {
 
         } catch (GeneralSecurityException | IOException e) {
             LOG.error("Could not load the keystore", e);
+            System.out.println("Could not load the keystore");
         }
     }
 
@@ -85,6 +86,7 @@ public class ExampleDTLSServer {
             if (LOG.isInfoEnabled()) {
                 LOG.info("Received request: {}", new String(raw.getBytes()));
             }
+            System.out.println("receive data " + new String(raw.getBytes()));
             RawData response = RawData.outbound("ACK".getBytes(),
                     raw.getEndpointContext(), null, false);
             connector.send(response);
