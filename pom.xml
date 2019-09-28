@@ -63,6 +63,14 @@
             <version>1.8.0</version>
         </dependency>
         <!--分布式日志 flume 结束-->
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.61</version>
+        </dependency>
+
     </dependencies>
 
 </project>

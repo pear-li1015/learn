@@ -1,21 +1,12 @@
-package com.coap.dtls;
+package com.communication.coap;
 
-/**
- * @Author: bin
- * @Date: 2019/9/20 9:34
- * @Description:
- */
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.security.GeneralSecurityException;
-import java.security.cert.Certificate;
-
+import com.Random;
 import com.coap.dtlsTest.CoAPMessage;
 import com.communication.Util;
-import com.communication.coap.MessageList;
 import org.eclipse.californium.elements.Connector;
 import org.eclipse.californium.elements.RawData;
 import org.eclipse.californium.elements.RawDataChannel;
+import org.eclipse.californium.elements.util.DaemonThreadFactory;
 import org.eclipse.californium.elements.util.SslContextUtil;
 import org.eclipse.californium.scandium.DTLSConnector;
 import org.eclipse.californium.scandium.config.DtlsConnectorConfig;
@@ -24,11 +15,24 @@ import org.eclipse.californium.scandium.dtls.pskstore.InMemoryPskStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExampleDTLSServer {
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.security.GeneralSecurityException;
+import java.security.cert.Certificate;
+import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * @Author: bin
+ * @Date: 2019/9/27 17:44
+ * @Description:
+ */
+public class CoAPServer {
 
     private static final int DEFAULT_PORT = 5684;
     private static final Logger LOG = LoggerFactory
-            .getLogger(ExampleDTLSServer.class.getName());
+            .getLogger(CoAPServer.class.getName());
     private static final char[] KEY_STORE_PASSWORD = "endPass".toCharArray();
     private static final String KEY_STORE_LOCATION = "certs/keyStore.jks";
     private static final char[] TRUST_STORE_PASSWORD = "rootPass".toCharArray();
@@ -36,7 +40,7 @@ public class ExampleDTLSServer {
 
     private DTLSConnector dtlsConnector;
 
-    public ExampleDTLSServer() {
+    public CoAPServer() {
         InMemoryPskStore pskStore = new InMemoryPskStore();
         // put in the PSK store the default identity/psk for tinydtls tests
         pskStore.setKey("Client_identity", "secretPSK".getBytes());
@@ -58,7 +62,7 @@ public class ExampleDTLSServer {
             builder.setRpkTrustAll();
             dtlsConnector = new DTLSConnector(builder.build());
             dtlsConnector
-                    .setRawDataReceiver(new RawDataChannelImpl(dtlsConnector));
+                    .setRawDataReceiver(new CoAPServer.RawDataChannelImpl(dtlsConnector));
 
         } catch (GeneralSecurityException | IOException e) {
             LOG.error("Could not load the keystore", e);
@@ -90,10 +94,45 @@ public class ExampleDTLSServer {
                 LOG.info("Received request: {}", new String(raw.getBytes()));
             }
 
+            /** server 处理接收到数据的逻辑 ， 有时会调用回调函数， 有时会 返回请求 。 不管怎样都会再压入 list*/
+            // TODO 如果需要从此server返回，从这里返回。
+            // TODO 否则这里为了保证通信效率，应直接将message压入list
+            // 根据 raw获取 message
             CoAPMessage message = Util.transBytesToMessage(raw.getBytes());
-            MessageList.getPreHandList().add(message);
-            MessageList.getPreHandList().add(message);
-            MessageList.getPreHandList().add(message);
+            // 如果message haveCallBack
+            if (message.isHaveCallBack()) {
+
+
+            }
+            double a = Math.random();
+            if (a < 0.33333) {
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+            } else if (a > 0.66666) {
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+            } else {
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+                MessageList.getPreHandList().add(message);
+            }
             System.out.println("server receive a message");
             System.out.println(MessageList.getPreHandList().size());
 
@@ -105,15 +144,24 @@ public class ExampleDTLSServer {
         }
     }
 
-    public static void main(String[] args) {
+    public void startAServer() {
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
+                new DaemonThreadFactory("Aux" + new Date().getTime() + "#"));
+        executor.execute(new Runnable() {
 
-        ExampleDTLSServer server = new ExampleDTLSServer();
-        server.start();
-        try {
-            for (;;) {
-                Thread.sleep(5000);
+            @Override
+            public void run() {
+                CoAPServer server = new CoAPServer();
+                server.start();
+                System.out.println("a server is started ...");
+                try {
+                    for (;;) {
+                        Thread.sleep(5000);
+                    }
+                } catch (InterruptedException e) {
+                }
             }
-        } catch (InterruptedException e) {
-        }
+        });
     }
+
 }

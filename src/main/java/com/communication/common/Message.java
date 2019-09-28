@@ -2,6 +2,7 @@ package com.communication.common;
 
 import com.coap.dtlsTest.CoAPCallBack;
 
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -10,6 +11,8 @@ import java.util.Date;
  * @Description:
  */
 public abstract class Message {
+    // 此消息的协议
+    private char protocol;
     // 消息的发送方
     private String from;
     // 消息的接收方
@@ -25,7 +28,10 @@ public abstract class Message {
     // 标识此Message是否有回调函数
     // 因为Client在send时，不会将 CoAPCallBack带到Server，需要告诉Server,
     // 在将此Message返回来的时候是否有回调函数在列表里等待。
-    private boolean haveCallBack;
+    private boolean haveCallBack = false;
+
+    Message() {
+    }
 
     public Message(String to, byte[] content) {
         this.to = to;
@@ -40,6 +46,13 @@ public abstract class Message {
 
     public abstract void send();
 
+    public char getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(char protocol) {
+        this.protocol = protocol;
+    }
 
     public String getFrom() {
         return from;
@@ -95,5 +108,18 @@ public abstract class Message {
 
     public void setHaveCallBack(boolean haveCallBack) {
         this.haveCallBack = haveCallBack;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", content=" + Arrays.toString(content) +
+                ", sendTime=" + sendTime +
+                ", uuid='" + uuid + '\'' +
+                ", callBack=" + callBack +
+                ", haveCallBack=" + haveCallBack +
+                '}';
     }
 }

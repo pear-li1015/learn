@@ -1,5 +1,6 @@
 package com.coap.dtlsTest;
 
+import com.communication.ConstUtil;
 import com.communication.common.Message;
 
 import java.util.Date;
@@ -30,12 +31,14 @@ public class CoAPMessage extends Message {
 
     public CoAPMessage(String to, byte[] content) {
         super(to, content);
+        this.setProtocol(ConstUtil.COAP);
 //        this.to = to;
 //        this.content = content;
     }
 
     public CoAPMessage(String to, byte[] content, CoAPCallBack callback) {
         super(to, content, callback);
+        this.setProtocol(ConstUtil.COAP);
 //        this.to = to;
 //        this.content = content;
 //        this.callBack = callback;

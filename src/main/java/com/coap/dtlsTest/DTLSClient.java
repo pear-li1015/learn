@@ -20,6 +20,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.communication.Util;
+import com.communication.coap.MessageList;
 import org.eclipse.californium.elements.*;
 import org.eclipse.californium.elements.util.DaemonThreadFactory;
 import org.eclipse.californium.elements.util.SslContextUtil;
@@ -141,7 +143,10 @@ public class DTLSClient {
     }
 
     private void startTest(InetSocketAddress peer) {
-        RawData data = RawData.outbound(payload.getBytes(), new AddressEndpointContext(peer), new MessageCallback() {
+        CoAPMessage message = new CoAPMessage("to", "content".getBytes());
+        message.send();
+
+        RawData data = RawData.outbound(Util.transMessageToBytes(message), new AddressEndpointContext(peer), new MessageCallback() {
             @Override
             public void onConnecting() {
 
@@ -173,7 +178,18 @@ public class DTLSClient {
         }, false);
         dtlsConnector.send(data);
     }
-
+    private void sendMessage(InetSocketAddress peer) {
+//
+//        CoAPMessage message = new CoAPMessage("to", "content".getBytes());
+//        message.send();
+        List<CoAPMessage> messageList = MessageList.getPreHandList();
+        if (messageList.size() > 0) {
+            System.out.println("client send a message, 当前 list 的长度为： " + messageList.size());
+            CoAPMessage message = messageList.remove(0);
+            RawData data = RawData.outbound(Util.transMessageToBytes(message), new AddressEndpointContext(peer), null, false);
+            dtlsConnector.send(data);
+        }
+    }
     private int stop() {
         if (dtlsConnector.isRunning()) {
             dtlsConnector.destroy();
@@ -202,6 +218,7 @@ public class DTLSClient {
 //            peer = new InetSocketAddress(args[3], Integer.parseInt(args[4]));
 //        } else {
 //            peer = new InetSocketAddress(InetAddress.getLoopbackAddress(), DEFAULT_PORT);
+//            peer = new InetSocketAddress("192.168.1.145", DEFAULT_PORT);
             peer = new InetSocketAddress("localhost", DEFAULT_PORT);
         System.out.println(InetAddress.getLoopbackAddress().getHostAddress() + DEFAULT_PORT);
 //        }
@@ -230,11 +247,14 @@ public class DTLSClient {
 //        for (int index = 0; index < clients; ++index) {
 //            statistic[index] = client.stop();
 //        }
-        try {
-            for (;;) {
-                Thread.sleep(5000);
+        while (true) {
+            System.out.println("当前list的长度为" + MessageList.getPreHandList().size());
+            if (MessageList.getPreHandList().size() > 0) {
+                client.sendMessage(peer);
+            } else {
+                Thread.sleep(1000);
             }
-        } catch (InterruptedException e) {
+            Thread.sleep(1000);
         }
     }
 }
