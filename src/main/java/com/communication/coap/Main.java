@@ -1,6 +1,12 @@
 package com.communication.coap;
 
+import com.coap.dtlsTest.CoAPCallBack;
 import com.coap.dtlsTest.CoAPMessage;
+import com.communication.MessageHandler;
+import com.communication.common.CallBack;
+import com.communication.common.Message;
+import com.flume.FlumeTest3;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +18,7 @@ import java.util.List;
  */
 public class Main {
 
+    private static Logger log = Logger.getLogger(Main.class);
     public static void main(String[] args) {
         // 启动一个server
         CoAPServer server = new CoAPServer();
@@ -20,6 +27,21 @@ public class Main {
         // 启动一个client
         CoAPClient client = new CoAPClient();
         client.startAClient();
+
+        // 启动一个handler
+        MessageHandler handler = new MessageHandler();
+        handler.startAHandler();
+
+        // 从client发起一个请求，请求server的一个文件。并在返回时保存。
+        Message message = new CoAPMessage("", "".getBytes(), new CallBack() {
+            @Override
+            public void callback(Message response) {
+                log.info(new String(response.getContent()));
+                System.out.println("回调函数中内容" + new String(response.getContent()));
+            }
+        });
+        message.send();
+
 
 
         while (true) {

@@ -21,7 +21,10 @@ public class Util {
         message.setFrom(jsonObject.getString("from"));
         message.setSendTime(jsonObject.getDate("sendTime"));
         message.setUuid(jsonObject.getString("uuid"));
-        message.setHaveCallBack(jsonObject.getBooleanValue("haveCallBack"));
+        message.setState(jsonObject.getByte("state"));
+        message.setProtocol(jsonObject.getByte("protocol"));
+//        byte b = 1;
+//        message.setHaveCallBack(jsonObject.getBooleanValue("haveCallBack"));
         return message;
     }
 
@@ -31,16 +34,5 @@ public class Util {
         return jsonStr.getBytes();
     }
 
-    public static void main(String[] args) {
-        CoAPMessage message = new CoAPMessage("to", "content".getBytes());
-        message.send();
 
-        System.out.println(message);
-        byte[] bytes = transMessageToBytes(message);
-
-        CoAPMessage message1 = transBytesToMessage(bytes);
-        System.out.println(message1);
-
-
-    }
 }

@@ -2,7 +2,9 @@ package com.communication.coap;
 
 import com.coap.dtls.ExampleDTLSClient;
 import com.coap.dtlsTest.CoAPMessage;
+import com.communication.ConstUtil;
 import com.communication.Util;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.eclipse.californium.elements.*;
 import org.eclipse.californium.elements.util.DaemonThreadFactory;
 import org.eclipse.californium.elements.util.SslContextUtil;
@@ -60,6 +62,7 @@ public class CoAPClient {
                 public void receiveData(RawData raw) {
                     System.out.println("client receive data ");
                     if (dtlsConnector.isRunning()) {
+                        // TODO 服务器的这里不应该有任何逻辑， 只有client的设备，必须从此接收响应。
 //                        receive(raw);
 
                     }
@@ -81,17 +84,21 @@ public class CoAPClient {
     }
 
     private void startTest(InetSocketAddress peer) {
-        CoAPMessage message = new CoAPMessage("to", "content".getBytes());
-        message.send();
-        RawData data = RawData.outbound(Util.transMessageToBytes(message), new AddressEndpointContext(peer), null, false);
-        dtlsConnector.send(data);
+//        CoAPMessage message = new CoAPMessage("to", "content".getBytes());
+//        message.send();
+//        RawData data = RawData.outbound(Util.transMessageToBytes(message), new AddressEndpointContext(peer), null, false);
+//        dtlsConnector.send(data);
 
         while (true) {
-            System.out.println("当前list的长度为" + MessageList.getPreHandList().size());
-            List<CoAPMessage> messageList = MessageList.getPreHandList();
+            System.out.println("当前 preSendList 的长度为" + MessageList.getPreSendList().size());
+            List<CoAPMessage> messageList = MessageList.getPreSendList();
             if (messageList.size() > 0) {
                 System.out.println("client send a message, 当前 list 的长度为： " + messageList.size());
                 CoAPMessage message1 = messageList.remove(0);
+                // 如果 此message需要在此 服务器上执行回调
+                if (message1.getState() == ConstUtil.MESSAGE_HIS_CALLBACK) {
+                    MessageList.getPreCallBackList().add(message1);
+                }
                 RawData data1 = RawData.outbound(Util.transMessageToBytes(message1), new AddressEndpointContext(peer), null, false);
                 dtlsConnector.send(data1);
             }

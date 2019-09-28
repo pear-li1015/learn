@@ -2,6 +2,7 @@ package com.communication.coap;
 
 import com.Random;
 import com.coap.dtlsTest.CoAPMessage;
+import com.communication.ConstUtil;
 import com.communication.Util;
 import org.eclipse.californium.elements.Connector;
 import org.eclipse.californium.elements.RawData;
@@ -90,56 +91,26 @@ public class CoAPServer {
 
         @Override
         public void receiveData(final RawData raw) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Received request: {}", new String(raw.getBytes()));
-            }
+//            if (LOG.isInfoEnabled()) {
+//                LOG.info("Received request: {}", new String(raw.getBytes()));
+//            }
 
             /** server 处理接收到数据的逻辑 ， 有时会调用回调函数， 有时会 返回请求 。 不管怎样都会再压入 list*/
-            // TODO 如果需要从此server返回，从这里返回。
-            // TODO 否则这里为了保证通信效率，应直接将message压入list
+
             // 根据 raw获取 message
             CoAPMessage message = Util.transBytesToMessage(raw.getBytes());
-            // 如果message haveCallBack
-            if (message.isHaveCallBack()) {
-
-
-            }
-            double a = Math.random();
-            if (a < 0.33333) {
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-            } else if (a > 0.66666) {
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
+            if (message.getState() == ConstUtil.MESSAGE_NEED_RESPONSE) {
+                // TODO 如果需要从此server返回, 直接从这里返回 请求结果
+                RawData response = RawData.outbound("ACK".getBytes(),
+                        raw.getEndpointContext(), null, false);
+                connector.send(response);
             } else {
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
-                MessageList.getPreHandList().add(message);
+                // message 压入 待处理列表
+                // 这里为了保证通信效率，直接将message压入list
                 MessageList.getPreHandList().add(message);
             }
-            System.out.println("server receive a message");
-            System.out.println(MessageList.getPreHandList().size());
 
-//            System.out.println("receive data " + new String(raw.getBytes()));
-            RawData response = RawData.outbound("ACK".getBytes(),
-                    raw.getEndpointContext(), null, false);
-            connector.send(response);
+            System.out.println("server receive a message, 当前 PreHandList 的长度为： " + MessageList.getPreHandList().size());
 
         }
     }

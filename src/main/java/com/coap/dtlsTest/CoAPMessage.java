@@ -1,6 +1,8 @@
 package com.coap.dtlsTest;
 
 import com.communication.ConstUtil;
+import com.communication.coap.MessageList;
+import com.communication.common.CallBack;
 import com.communication.common.Message;
 
 import java.util.Date;
@@ -36,7 +38,7 @@ public class CoAPMessage extends Message {
 //        this.content = content;
     }
 
-    public CoAPMessage(String to, byte[] content, CoAPCallBack callback) {
+    public CoAPMessage(String to, byte[] content, CallBack callback) {
         super(to, content, callback);
         this.setProtocol(ConstUtil.COAP);
 //        this.to = to;
@@ -54,6 +56,7 @@ public class CoAPMessage extends Message {
         // 4、如果callBack为null， 直接发送
         if (this.getCallBack() != null) {
             // 存放进列表
+            MessageList.getPreSendList().add(this);
 
         }
         //send

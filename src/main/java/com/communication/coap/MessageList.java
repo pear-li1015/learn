@@ -27,4 +27,18 @@ public class MessageList {
     public static List<CoAPMessage> getPreCallBackList() {
         return preCallBackList;
     }
+
+    // 根据 uuid 发送方 接收方 查找 preCallBackList 中，唯一 Message
+    public static CoAPMessage getByUuid(String uuid, String from, String to) {
+        while (preCallBackList.iterator().hasNext()) {
+            CoAPMessage message = preCallBackList.iterator().next();
+            if (message.getUuid().equals(uuid) && (message.getFrom().equals(from) || message.getFrom().equals(to))
+                    && (message.getTo().equals(from) || message.getTo().equals(to))) {
+                preCallBackList.remove(message);
+                return message;
+            }
+        }
+        System.out.println("没有找到 相应的 可回调的内容");
+        return null;
+    }
 }
