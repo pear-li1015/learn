@@ -31,6 +31,35 @@ public class CoAPMessage extends Message {
 //    // 在将此Message返回来的时候是否有回调函数在列表里等待。
 //    private boolean haveCallBack;
 
+    // 分组接收的返回结果
+    private byte[][] response;
+    private int currentFrame;
+    private int totalFrame;
+    // 已保存的帧数
+    public int inFrame = 0;
+
+
+    public void setResponse(int row, byte[] rowContent) {
+        this.response[row] = rowContent;
+        inFrame ++;
+    }
+    public void initResponse(int row, int col, int totalFrame) {
+        this.response = new byte[row][col];
+        this.totalFrame = totalFrame;
+    }
+    public CoAPMessage deepCopy() {
+        CoAPMessage result = new CoAPMessage(this.getTo(), this.getContent());
+        result.setCurrentFrame(this.getCurrentFrame());
+        byte[] newByte = new byte[this.getContent().length];
+        System.arraycopy(this.getContent(), 0, newByte, 0, this.getContent().length);
+        result.setContent(newByte);
+        result.setUuid(this.getUuid());
+        result.setFrom(this.getFrom());
+        result.setState(this.getState());
+        result.setTotalFrame(this.getTotalFrame());
+        return result;
+    }
+
     public CoAPMessage(String to, byte[] content) {
         super(to, content);
         this.setProtocol(ConstUtil.COAP);
@@ -74,6 +103,29 @@ public class CoAPMessage extends Message {
     // 5、如果回调列表中没有其他消息的uuid一致， 考虑如何处理 （报错）
 
 
+    public byte[][] getResponse() {
+        return response;
+    }
+
+    public void setResponse(byte[][] response) {
+        this.response = response;
+    }
+
+    public int getCurrentFrame() {
+        return currentFrame;
+    }
+
+    public void setCurrentFrame(int currentFrame) {
+        this.currentFrame = currentFrame;
+    }
+
+    public int getTotalFrame() {
+        return totalFrame;
+    }
+
+    public void setTotalFrame(int totalFrame) {
+        this.totalFrame = totalFrame;
+    }
 
     /**
      * 生成token

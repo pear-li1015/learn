@@ -20,5 +20,7 @@ public class ConstUtil {
     public static final byte MESSAGE_HIS_CALLBACK = 2;
     public static final byte MESSAGE_MY_CALLBACK = 3;
     public static final byte MESSAGE_NO_CALLBACK = 4;
+    /** 用于指明消息的为帧还是*/
+
 
 }

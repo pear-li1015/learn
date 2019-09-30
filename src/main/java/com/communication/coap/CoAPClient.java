@@ -99,13 +99,16 @@ public class CoAPClient {
                 if (message1.getState() == ConstUtil.MESSAGE_HIS_CALLBACK) {
                     MessageList.getPreCallBackList().add(message1);
                 }
+//                System.out.println(message1);
+//                System.out.println(Util.transMessageToBytes(message1).length);
                 RawData data1 = RawData.outbound(Util.transMessageToBytes(message1), new AddressEndpointContext(peer), null, false);
                 dtlsConnector.send(data1);
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -34,7 +34,7 @@ public class MessageList {
             CoAPMessage message = preCallBackList.iterator().next();
             if (message.getUuid().equals(uuid) && (message.getFrom().equals(from) || message.getFrom().equals(to))
                     && (message.getTo().equals(from) || message.getTo().equals(to))) {
-                preCallBackList.remove(message);
+//                preCallBackList.remove(message);
                 return message;
             }
         }

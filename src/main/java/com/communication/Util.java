@@ -23,6 +23,8 @@ public class Util {
         message.setUuid(jsonObject.getString("uuid"));
         message.setState(jsonObject.getByte("state"));
         message.setProtocol(jsonObject.getByte("protocol"));
+        message.setTotalFrame(jsonObject.getInteger("totalFrame"));
+        message.setCurrentFrame(jsonObject.getInteger("currentFrame"));
 //        byte b = 1;
 //        message.setHaveCallBack(jsonObject.getBooleanValue("haveCallBack"));
         return message;

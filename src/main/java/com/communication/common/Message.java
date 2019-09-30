@@ -130,7 +130,7 @@ public abstract class Message {
         return "Message{" +
                 "from='" + from + '\'' +
                 ", to='" + to + '\'' +
-                ", content=" + Arrays.toString(content) +
+//                ", content=" + Arrays.toString(content) +
                 ", sendTime=" + sendTime +
                 ", uuid='" + uuid + '\'' +
                 ", callBack=" + callBack +
