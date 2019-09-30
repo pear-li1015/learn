@@ -4,6 +4,10 @@ import com.coap.dtlsTest.CoAPMessage;
 import com.communication.coap.MessageList;
 import org.eclipse.californium.elements.util.DaemonThreadFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -49,7 +53,7 @@ public class MessageHandler {
                             // TODO 拿到对方数据，做点什么。
                             message.getContent();
                             // TODO 比如说返回一个文件
-                            message.setContent("这是返回的文件".getBytes());
+                            message.setContent(getAFile());
                             // 设置发送者和接收者
                             message.setTo(message.getFrom());
                             message.setFrom("");
@@ -82,6 +86,27 @@ public class MessageHandler {
     private void saveBytesToFile(byte[] bytes) {
         System.out.println("message handler save bytes to file ...");
 
+    }
+    private byte[] getAFile() {
+        File inFile = new File("D:\\test\\coap\\file.jpg");
+        InputStream in = null;
+        byte[] inBytes;
+        try {
+            in = new FileInputStream(inFile);
+
+            inBytes = new byte[(int)inFile.length()];
+            if (inBytes.length == inFile.length()) {
+                in.read(inBytes);
+            } else {
+                System.out.println("文件过大。");
+            }
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            inBytes = new byte[0];
+        }
+
+        return inBytes;
     }
 
 }
