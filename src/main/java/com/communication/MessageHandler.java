@@ -46,7 +46,7 @@ public class MessageHandler {
                                 if (message.getTotalFrame() > 1) {
                                     if (preMessage.getResponse() == null) {
                                         System.out.println("第一次为 null");
-                                        preMessage.initResponse(message.getTotalFrame() + 1, MAX_SEND_LENGTH + 1, message.getTotalFrame());
+                                        preMessage.initResponse(message.getTotalFrame() + 1, Util.MAX_SEND_LENGTH + 1, message.getTotalFrame());
                                     }
 //                                    preMessage.getResponse()[]
 //                                    preMessage.setResponse();
@@ -55,8 +55,8 @@ public class MessageHandler {
                                     log.info("当前完成的帧数： " + preMessage.inFrame + "  总共需要完成的帧数： " + preMessage.getTotalFrame());
                                     System.out.println("当前完成的帧数： " + preMessage.inFrame + "  总共需要完成的帧数： " + preMessage.getTotalFrame());
                                     System.out.println("=========当前帧================");
-                                    System.out.println(message.getContent());
-                                    System.out.println(new String(message.getContent()));
+//                                    System.out.println(message.getContent());
+//                                    System.out.println(new String(message.getContent()));
                                     if (preMessage.inFrame == preMessage.getTotalFrame()) {
                                         System.out.println("--------------" +
                                                 "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" +
@@ -68,6 +68,7 @@ public class MessageHandler {
                                         // 可以写出了。。。
                                         try {
                                             OutputStream out = new FileOutputStream("D:\\test\\coap\\output.jpg");
+//                                            OutputStream out = new FileOutputStream("D:\\test\\coap\\output1.mp4");
                                             for (int i = 0; i < message.getTotalFrame(); i++) {
                                                 out.write(preMessage.getResponse()[i]);
                                             }
@@ -94,7 +95,7 @@ public class MessageHandler {
 //                            message.setContent(getAFile());
                             // 设置发送者和接收者
                             message.setTo(message.getFrom());
-                            message.setFrom("");
+                            message.setFrom("123456789012");
                             message.setSendTime(new Date());
                             // 改状态
                             // 告诉对方，那里有回调 等待执行
@@ -102,17 +103,16 @@ public class MessageHandler {
                             // TODO 比如说返回一个文件
 //                            byte[] result = getAFile();
                             File inFile = new File("D:\\test\\coap\\file.jpg");
-                            int frameAmount = (int)(inFile.length() / MAX_SEND_LENGTH) + 1;
+//                            File inFile = new File("D:\\test\\coap\\test.mp4");
+                            int frameAmount = (int)(inFile.length() / Util.MAX_SEND_LENGTH) + 1;
                             message.setTotalFrame(frameAmount);
                             try {
                                 InputStream in = new FileInputStream(inFile);
-                                OutputStream out = new FileOutputStream("D:\\test\\coap\\out.txt");
                                 for (int i = 0; i < frameAmount; i ++) {
 //                                    result[0] = (byte)i;
-                                    byte[] result = new byte[MAX_SEND_LENGTH];
+                                    byte[] result = new byte[Util.MAX_SEND_LENGTH];
                                     message.setCurrentFrame(i);
                                     in.read(result);
-                                    out.write(result);
                                     message.setContent(result);
 
 
@@ -120,7 +120,6 @@ public class MessageHandler {
                                     MessageList.getPreSendList().add(message.deepCopy());
                                 }
                                 in.close();
-                                out.close();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

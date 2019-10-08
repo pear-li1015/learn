@@ -99,6 +99,8 @@ public class CoAPServer {
 
             // 根据 raw获取 message
             CoAPMessage message = Util.transBytesToMessage(raw.getBytes());
+            System.out.println("==========server 接收到的message========");
+            System.out.println(message.toString());
             if (message.getState() == ConstUtil.MESSAGE_NEED_RESPONSE) {
                 // TODO 如果需要从此server返回, 直接从这里返回 请求结果
                 RawData response = RawData.outbound("ACK".getBytes(),

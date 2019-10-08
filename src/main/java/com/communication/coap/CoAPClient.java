@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class CoAPClient {
     private static final int DEFAULT_PORT = 5684;
-    private static final long DEFAULT_TIMEOUT_NANOS = TimeUnit.MILLISECONDS.toNanos(10000);
     private static final char[] KEY_STORE_PASSWORD = "endPass".toCharArray();
     private static final String KEY_STORE_LOCATION = "certs/keyStore.jks";
     private static final char[] TRUST_STORE_PASSWORD = "rootPass".toCharArray();

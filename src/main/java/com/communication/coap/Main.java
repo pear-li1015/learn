@@ -37,13 +37,14 @@ public class Main {
         handler.startAHandler();
 
         // 从client发起一个请求，请求server的一个文件。并在返回时保存。
-        Message message = new CoAPMessage("", "".getBytes(), new CallBack() {
+        Message message = new CoAPMessage("123456789012", "给我一个文件".getBytes(), new CallBack() {
             @Override
             public void callback(Message response) {
                 System.out.println("准备执行回调函数 。。。");
                 // 保存文件到磁盘
                 try {
-                    OutputStream outputStream = new FileOutputStream("D:\\test\\coap\\output.jpg");
+//                    OutputStream outputStream = new FileOutputStream("D:\\test\\coap\\output2.mp4");
+                    OutputStream outputStream = new FileOutputStream("D:\\test\\coap\\output2.jpg");
 //                    outputStream.
                     outputStream.write(response.getContent());
                     outputStream.close();
@@ -56,6 +57,9 @@ public class Main {
         });
 //        DTLSConnector.
         message.send();
+
+        System.out.println("==========client 发送的message========");
+        System.out.println(message.toString());
         /**
          * 以上测试的消息发送路径为：
          * 1、client向server发送请求，等待返回结果后执行回调

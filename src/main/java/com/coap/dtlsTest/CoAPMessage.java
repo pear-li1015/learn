@@ -57,6 +57,7 @@ public class CoAPMessage extends Message {
         result.setFrom(this.getFrom());
         result.setState(this.getState());
         result.setTotalFrame(this.getTotalFrame());
+        result.setSendTime(this.getSendTime());
         return result;
     }
 
@@ -77,13 +78,15 @@ public class CoAPMessage extends Message {
 
     public void send() {
         // 1、设置消息的发送方
-        this.setFrom("");
+        this.setFrom("123456789012");
         // 2、设置消息发送时间
         this.setSendTime(new Date());
         // 3、生成消息的唯一标识
         this.setUuid(getUUID());
         // 4、如果callBack为null， 直接发送
         if (this.getCallBack() != null) {
+            System.out.println("coap message .send()");
+            System.out.println(this.toString());
             // 存放进列表
             MessageList.getPreSendList().add(this);
 
@@ -131,7 +134,8 @@ public class CoAPMessage extends Message {
      * 生成token
      * @return
      */
-    private static String getUUID()
+    // TODO 这个方法最好改成 getNewUUID
+    public static String getUUID()
     {
         return UUID.randomUUID().toString().replace("-", "");
     }

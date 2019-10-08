@@ -43,10 +43,31 @@ https://baijiahao.baidu.com/s?id=1609055547851599818&wfr=spider&for=pc
 每帧应该包含以下内容
 1、协议类型 1byte
 2、回调函数相关状态 1byte
-3、发送方、接收方 
-4、发送时间
-5、uuid
-6、当前帧号
+3、发送方、接收方 暂定各12byte
+4、发送时间  new Date().getTime() 13byte long 占8byte
+5、uuid 32byte
+6、当前帧号 int 4byte
 7、总共帧数。
 1-7 为帧头。
 8、消息体。
+还可以包含 差错控制编码（链路层）、优先级、安全控制 等信息。
+
+应具有的功能
+1、超时重发
+有一线程一直在扫等待接收数据的message， 如果太长时间一直没有新的帧传入，重新请求未收到的帧。
+2、只具有client的设备，在使用dtls加密的协议请求大文件时。
+server.response无法一次返回全部内容，需要client多次请求。
+
+需要保证线程安全的地方
+1、list.add 或 list.addall
+2、list.get(0) remove(0)
+3、判断list的长度。一般情况是先判断list的长度是否大于0，然后get(0)
+以上三点使用 sychnolized即可保证。
+
+
+超时重发的一点思考
+1、只有client
+使用coap自带的超时重发
+2、有client和server
+client若收到，进行ack，server若超时未收到ack则重发。
+3、以上，只有server在收到ack后，才能释放缓存资源。
