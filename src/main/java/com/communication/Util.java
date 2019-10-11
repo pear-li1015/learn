@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.coap.dtlsTest.CoAPMessage;
 import com.communication.common.Message;
+import org.eclipse.californium.scandium.DTLSConnector;
 
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import java.util.Date;
  * @Description:
  */
 public class Util {
+    /** #{@link DTLSConnector} 中此属性为私有。*/
     public static final int MAX_PLAINTEXT_FRAGMENT_LENGTH = 16384; // max. DTLSPlaintext.length (2^14 bytes)
 
     public static final int PROTOCOL_LENGTH = 1;

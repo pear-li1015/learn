@@ -62,7 +62,9 @@ public class CoAPClient {
                     System.out.println("client receive data ");
                     if (dtlsConnector.isRunning()) {
                         // TODO 服务器的这里不应该有任何逻辑， 只有client的设备，必须从此接收响应。
+                        // server 接收完所有的块，响应一次。 这里删掉等待重传的块
 //                        receive(raw);
+//                        dtlsConnector.send();
 
                     }
                 }

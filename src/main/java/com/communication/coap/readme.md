@@ -71,3 +71,28 @@ server.response无法一次返回全部内容，需要client多次请求。
 2、有client和server
 client若收到，进行ack，server若超时未收到ack则重发。
 3、以上，只有server在收到ack后，才能释放缓存资源。
+
+一个大问题：
+目前coap接到数据保存到内存，然后再写。如果文件太大，怎么办？
+如何边接受边写。
+
+
+目前情况，使用dtls加密，的分包传输，已经实现，理论传输最大值 256M。
+但，存在的一个问题，所有的文件经过分包传输后，会变大一点点，大约是0.01M-0.02M。刚好一个数据包的大小。还有最后空的一部分。
+
+考虑实际需求，先提供几种。因为考虑设备的传输能力。
+1、加密的dtls。UDP 的 MTU 为 65535，最大传输量16384byte。具有超时重发能力。
+UDP 的 MTU 为 65535 即64k，californium 将单次传输量限制为16k
+参考 https://serverfault.com/questions/246508/how-is-the-mtu-is-65535-in-udp-but-ethernet-does-not-allow-frame-size-more-than
+2、非加密的dtls。最大传输量理论上无限制，但受内存的制约。californium已经做好分包。
+3、使用tcp/udp协议传输视频流数据。
+
+
+1、实现dtls加密的coap传输
+2、考虑设备实际的需求 （dtls加密的分包传输，很有可能是不必要的。）
+3、思考提供的服务方案。
+
+
+// 传输时，直接将要放进response的内容整理好，另一侧保存时，无需system.copyarray
+
+emq github
