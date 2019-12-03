@@ -13,6 +13,16 @@ import java.util.List;
  */
 public class CoAPUtil {
 
+    public static final String TEST_IN_IMAGE_PATH = "D:\\test\\coap\\file.jpg";
+    public static final String TEST_OUT_IMAGE_PATH = "D:\\test\\coap\\out.jpg";
+    public static final String TEST_IN_MP4_PATH = "D:\\test\\coap\\test.mp4";
+    public static final String TEST_OUT_MP4_PATH = "D:\\test\\coap\\out.mp4";
+    public static final String TEST_IN_DOCX_PATH = "D:\\test\\coap\\zzz.docx";
+    public static final String TEST_OUT_DOCX_PATH = "D:\\test\\coap\\zzz1.docx";
+
+
+    public static final String TEST_IN_FILE_PATH = TEST_IN_MP4_PATH;
+    public static final String TEST_OUT_FILE_PATH = TEST_OUT_MP4_PATH;
 
     /**
      * 将超出传输大小限制的信息拆分为多条信息

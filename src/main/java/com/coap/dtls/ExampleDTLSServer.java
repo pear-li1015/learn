@@ -98,7 +98,7 @@ public class ExampleDTLSServer {
             System.out.println(MessageList.getPreHandList().size());
 
 //            System.out.println("receive data " + new String(raw.getBytes()));
-            RawData response = RawData.outbound("ACK".getBytes(),
+            RawData response = RawData.outbound("ACK------------".getBytes(),
                     raw.getEndpointContext(), null, false);
             connector.send(response);
 

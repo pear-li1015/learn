@@ -1,6 +1,7 @@
 package com.communication;
 
 import com.coap.dtlsTest.CoAPMessage;
+import com.communication.coap.CoAPUtil;
 import com.communication.coap.Main;
 import com.communication.coap.MessageList;
 import com.communication.common.Message;
@@ -67,7 +68,7 @@ public class MessageHandler {
                                                 "---------------------");
                                         // 可以写出了。。。
                                         try {
-                                            OutputStream out = new FileOutputStream("D:\\test\\coap\\zzz2.docx");
+                                            OutputStream out = new FileOutputStream(CoAPUtil.TEST_OUT_FILE_PATH);
 //                                            OutputStream out = new FileOutputStream("D:\\test\\coap\\output1.mp4");
                                             for (int i = 0; i < message.getTotalFrame(); i++) {
                                                 out.write(preMessage.getResponse()[i]);
@@ -102,7 +103,7 @@ public class MessageHandler {
                             message.setState(ConstUtil.MESSAGE_MY_CALLBACK);
                             // TODO 比如说返回一个文件
 //                            byte[] result = getAFile();
-                            File inFile = new File("D:\\test\\coap\\zzz1.docx");
+                            File inFile = new File(CoAPUtil.TEST_IN_FILE_PATH);
 //                            File inFile = new File("D:\\test\\coap\\test.mp4");
                             // TODO 这里如果刚刚是整数，那就多了一帧
                             int balance = (int)(inFile.length() % Util.MAX_SEND_LENGTH) == 0 ? 0 : 1;

@@ -5,6 +5,7 @@ import com.coap.dtlsTest.CoAPMessage;
 import com.communication.ConstUtil;
 import com.communication.Util;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.elements.*;
 import org.eclipse.californium.elements.util.DaemonThreadFactory;
 import org.eclipse.californium.elements.util.SslContextUtil;
@@ -102,7 +103,9 @@ public class CoAPClient {
                 }
 //                System.out.println(message1);
 //                System.out.println(Util.transMessageToBytes(message1).length);
+//                RawData data1 = RawData.outbound(Util.transMessageToBytes(message1), new AddressEndpointContext(peer), null, false);
                 RawData data1 = RawData.outbound(Util.transMessageToBytes(message1), new AddressEndpointContext(peer), null, false);
+
                 dtlsConnector.send(data1);
             } else {
                 try {

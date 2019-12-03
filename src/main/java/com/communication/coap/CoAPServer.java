@@ -91,6 +91,10 @@ public class CoAPServer {
 
         @Override
         public void receiveData(final RawData raw) {
+            System.out.println("-------receiveData----------");
+            // TODO 拿到发送方信息。
+            InetSocketAddress address = raw.getInetSocketAddress();
+            System.out.println(address.getHostName() + address.getPort());
 //            if (LOG.isInfoEnabled()) {
 //                LOG.info("Received request: {}", new String(raw.getBytes()));
 //            }

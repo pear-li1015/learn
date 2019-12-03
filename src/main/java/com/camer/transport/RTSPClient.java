@@ -9,6 +9,9 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * 启动不成功
+ */
 public class RTSPClient extends Thread implements IEvent {
 
     private static final String VERSION = " RTSP/1.0/r/n";

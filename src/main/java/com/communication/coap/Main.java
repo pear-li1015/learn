@@ -28,38 +28,38 @@ public class Main {
         CoAPServer server = new CoAPServer();
         server.startAServer();
 
-        // 启动一个client
-        CoAPClient client = new CoAPClient();
-        client.startAClient();
-
-        // 启动一个handler
-        MessageHandler handler = new MessageHandler();
-        handler.startAHandler();
-
-        // 从client发起一个请求，请求server的一个文件。并在返回时保存。
-        Message message = new CoAPMessage("123456789012", "给我一个文件".getBytes(), new CallBack() {
-            @Override
-            public void callback(Message response) {
-                System.out.println("准备执行回调函数 。。。");
-                // 保存文件到磁盘
-                try {
-//                    OutputStream outputStream = new FileOutputStream("D:\\test\\coap\\output2.mp4");
-                    OutputStream outputStream = new FileOutputStream("D:\\test\\coap\\output2.jpg");
-//                    outputStream.
-                    outputStream.write(response.getContent());
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-//                log.info(new String(response.getContent()));
-//                System.out.println("回调函数中内容" + new String(response.getContent()));
-            }
-        });
-//        DTLSConnector.
-        message.send();
-
-        System.out.println("==========client 发送的message========");
-        System.out.println(message.toString());
+//        // 启动一个client
+//        CoAPClient client = new CoAPClient();
+//        client.startAClient();
+//
+//        // 启动一个handler
+//        MessageHandler handler = new MessageHandler();
+//        handler.startAHandler();
+//
+//        // 从client发起一个请求，请求server的一个文件。并在返回时保存。
+//        Message message = new CoAPMessage("123456789012", "给我一个文件".getBytes(), new CallBack() {
+//            @Override
+//            public void callback(Message response) {
+//                System.out.println("准备执行回调函数 。。。");
+//                // 保存文件到磁盘
+//                try {
+////                    OutputStream outputStream = new FileOutputStream("D:\\test\\coap\\output2.mp4");
+//                    OutputStream outputStream = new FileOutputStream("D:\\test\\coap\\output2.jpg");
+////                    outputStream.
+//                    outputStream.write(response.getContent());
+//                    outputStream.close();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+////                log.info(new String(response.getContent()));
+////                System.out.println("回调函数中内容" + new String(response.getContent()));
+//            }
+//        });
+////        DTLSConnector.
+//        message.send();
+//
+//        System.out.println("==========client 发送的message========");
+//        System.out.println(message.toString());
         /**
          * 以上测试的消息发送路径为：
          * 1、client向server发送请求，等待返回结果后执行回调

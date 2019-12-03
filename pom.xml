@@ -7,14 +7,15 @@
     <groupId>com.bin</groupId>
     <artifactId>learn</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>7</source>
-                    <target>7</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -91,6 +92,51 @@
             <scope>test</scope>
         </dependency>
         <!--摄像头结束-->
+
+        <!-- https://mvnrepository.com/artifact/org.usb4java/usb4java -->
+        <dependency>
+            <groupId>org.usb4java</groupId>
+            <artifactId>usb4java-javax</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+        <!--vlc-->
+        <!--<dependency>-->
+            <!--<groupId>uk.co.caprica</groupId>-->
+            <!--<artifactId>vlcj</artifactId>-->
+            <!--<version>4.2.0</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>uk.co.caprica</groupId>
+            <artifactId>vlcj</artifactId>
+            <version>3.12.1</version>
+        </dependency>
+
+
+        <!--视频和音频文件进行解码、编码、以及录制   导入失败-->
+        <!-- https://mvnrepository.com/artifact/xuggle/xuggle-xuggler -->
+        <!--<dependency>-->
+            <!--<groupId>xuggle</groupId>-->
+            <!--<artifactId>xuggle-xuggler</artifactId>-->
+            <!--<version>5.4</version>-->
+        <!--</dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/xuggle/xuggle-xuggler -->
+        <!--<dependency>-->
+            <!--<groupId>xuggle</groupId>-->
+            <!--<artifactId>xuggle-xuggler</artifactId>-->
+            <!--<version>5.2</version>-->
+            <!--<type>pom</type>-->
+        <!--</dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>4.6.8</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>

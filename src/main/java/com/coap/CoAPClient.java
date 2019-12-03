@@ -2,10 +2,7 @@ package com.coap;
 
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
-import org.eclipse.californium.core.coap.BlockOption;
-import org.eclipse.californium.core.coap.OptionSet;
-import org.eclipse.californium.core.coap.Request;
-import org.eclipse.californium.core.coap.Response;
+import org.eclipse.californium.core.coap.*;
 import org.eclipse.californium.core.network.Endpoint;
 import org.eclipse.californium.core.network.Exchange;
 import org.eclipse.californium.core.network.stack.BlockwiseLayer;
@@ -32,6 +29,9 @@ public class CoAPClient {
         uri = new URI("localhost:5683/file");  //创建一个资源请求hello资源，注意默认端口为5683
         CoapClient client = new CoapClient(uri);
         CoapResponse response = client.get();
+//        Request request = new Request(CoAP.Code.POST, CoAP.Type.CON);
+        Request request = new Request(CoAP.Code.POST, CoAP.Type.ACK);
+        client.advanced(request);
         System.out.println("==" + response);
         if(response != null) {
             System.out.println("----");

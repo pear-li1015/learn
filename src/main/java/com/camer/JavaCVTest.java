@@ -5,6 +5,10 @@ import org.bytedeco.javacv.*;
 import javax.swing.*;
 import java.util.EnumSet;
 
+/**
+ * 调用本机摄像头。
+ * 试试可否转为流。。
+ */
 public class JavaCVTest {
     public static void main(String[] args) throws Exception {
         testCamera();
@@ -13,7 +17,7 @@ public class JavaCVTest {
 
 //    @Test
     public static void testCamera() throws InterruptedException, FrameGrabber.Exception {
-        OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
+        OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(1);
         grabber.start();   //开始获取摄像头数据
         CanvasFrame canvas = new CanvasFrame("摄像头");//新建一个窗口
         canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -25,6 +29,7 @@ public class JavaCVTest {
             }
 
             Frame frame = grabber.grab();
+
 
             canvas.showImage(frame);//获取摄像头图像并放到窗口上显示， 这里的Frame frame=grabber.grab(); frame是一帧视频图像
             Thread.sleep(50);//50毫秒刷新一次图像
