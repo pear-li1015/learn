@@ -1,14 +1,9 @@
 package com.camer;
 
-import javax.usb.UsbConfiguration;
-import javax.usb.UsbDevice;
-import javax.usb.UsbDeviceDescriptor;
-import javax.usb.UsbEndpoint;
-import javax.usb.UsbHostManager;
-import javax.usb.UsbHub;
-import javax.usb.UsbInterface;
-import javax.usb.UsbInterfacePolicy;
-import javax.usb.UsbPipe;
+import com.codeminders.hidapi.HIDDeviceInfo;
+import com.codeminders.hidapi.HIDManager;
+
+import javax.usb.*;
 import java.util.List;
 
 /**
@@ -18,10 +13,43 @@ import java.util.List;
  */
 public class UsbTest {
 
-    private static short idVendor = (short) 0x12D1;
-    private static short idProduct = (short) 0x1082;
+    private static short idVendor = (short) 0x045E;
+    private static short idProduct = (short) 0x028E;
 
     public static void main(String[] args) {
+//        test1();
+        test2();
+    }
+
+    public static void test3() {
+
+        List list;
+        try {
+            list = UsbHostManager.getUsbServices()
+                    .getRootUsbHub().getAttachedUsbDevices();
+            int a = 10;
+            int b = 15;
+
+        } catch (UsbException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void test2(){
+        try {
+
+            com.codeminders.hidapi.ClassPathLibraryLoader.loadNativeHIDLibrary();
+            HIDManager hidManager = HIDManager.getInstance();
+            HIDDeviceInfo[] infos = hidManager.listDevices();
+            for (HIDDeviceInfo info : infos) {
+                System.out.println("info: " + info.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void test1() {
+
         try {
             UsbPipe sendUsbPipe = new UsbTest().useUsb();
 
@@ -37,7 +65,6 @@ public class UsbTest {
             e.printStackTrace();
         }
     }
-
     public UsbPipe useUsb() throws Exception {
         UsbInterface iface = linkDevice();
         if (iface == null) {
@@ -115,6 +142,10 @@ public class UsbTest {
     public static void sendMassge(UsbPipe usbPipe, byte[] buff) throws Exception {
         usbPipe.syncSubmit(buff);//阻塞
         //usbPipe.asyncSubmit(buff);//非阻塞
+    }
+
+    List findAllDevice(UsbHub hub) {
+        return hub.getAttachedUsbDevices();
     }
 
     public UsbDevice findDevice(UsbHub hub) {
