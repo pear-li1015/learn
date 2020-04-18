@@ -10,3 +10,4 @@
 <img src="https://github.com/pear-li1015/learn/blob/master/imgs/MVCC_undo_log.gif" />
 
 
+![](https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=https%3A%2F%2Ftimgsa.baidu.com%2Ftimg%3Fimage%26quality%3D80%26size%3Db9999_10000%26sec%3D1587186603256%26di%3D25c46fff35ed784ae466bea0ff1608b5%26imgtype%3D0%26src%3Dhttp%253A%252F%252Ff.hiphotos.baidu.com%252Fzhidao%252Fpic%252Fitem%252Ff703738da9773912f6077237f9198618367ae247.jpg&amp;thumburl=https%3A%2F%2Fss0.bdstatic.com%2F70cFuHSh_Q1YnxGkpoWK1HF6hhy%2Fit%2Fu%3D181088938%2C2268280908%26fm%3D26%26gp%3D0.jpg)
