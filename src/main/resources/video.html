@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--引入播放器样式-->
+    <link href="http://vjs.zencdn.net/5.19/video-js.min.css" rel="stylesheet">
+    <!--引入播放器js-->
+    <script src="http://vjs.zencdn.net/5.19/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-flash@2/dist/videojs-flash.min.js"></script>
+    <script type="text/javascript">
+        /**
+         * 架构流程
+         * https://cloud.tencent.com/developer/article/1150172
+         * 可以尝试的方案
+         * http://www.360doc.com/content/19/0707/23/1314937_847334191.shtml
+         */
+        /** video.js 介绍
+         Video.js 是一个通用的在网页上嵌入视频播放器的 JS 库，Video.js 自动检测浏览器对 HTML5 的支持情况，如果不支持 HTML5 则自动使用 Flash 播放器。
+         优点：
+         1.它是开源免费的，你可以在github很容易的获取它的最新代码。
+         2.使用它非常的容易，只要花几秒钟就可以架起一个视频播放页面。
+         3.它几乎兼容所有的浏览器，并且优先使用html5，在不支持的浏览器中，会自动使用flash进行播放。
+         4. 界面可以定制，纯javascript和css打造。说明文档也非常的详细。
+         注：html5的video标签只支持mp4、webm、ogg三种格式，不支持flv，flash格式， flv格式是flash专用的，rtmp流为flv格式的，必须使用flash播放器，在video.js内部可以检测浏览器是否支持html5播放器直接播放，如果不支持内部会自动调用浏览器的flash播放器播放视频。Edge、谷歌浏览器中网站默认是禁用flash的，手动设置为允许flash即可
+         */
+    </script>
+</head>
+<body>
+<!--vjs-big-play-centered 播放按钮居中-->
+<!--poster默认的显示界面，就是还没点播放，给你显示的界面-->
+<!--controls 规定浏览器应该为视频提供播放控件-->
+<!--preload="auto" 是否提前加载-->
+<!--autoplay 自动播放-->
+<!--loop=true 自动循环-->
+<!--data-setup='{"example_option":true}' 可以把一些属性写到这个里面来，如data-setup={"autoplay":true}-->
+<!--rtsp://@211.87.235.229:8554/test-->
+<video id="my-player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto"
+       autoplay="autoplay"
+       width="500" height="400" data-setup='{}'>
+    <!--poster="//vjs.zencdn.net/v/oceans.png"-->
+    <!--src: 规定媒体文件的 URL  type:规定媒体资源的类型-->
+    <!--<source src='rtmp://211.87.235.123:1935/live/room'/>-->
+    <source src='rtmp://192.168.0.110:1935/vod&file=2.mp4'/>
+    <!--<source src='rtsp://@211.87.235.229:8554/test'/>-->
+    <!-- 下方可用 -->
+    <!--<source src='rtmp://mobliestream.c3tv.com:554/live/goodtv.sdp' />-->
+</video>
+<script type="text/javascript">
+    // 设置flash路径,用于在videojs发现浏览器不支持HTML5播放器的时候自动唤起flash播放器
+    videojs.options.flash.swf = 'https://cdn.bootcss.com/videojs-swf/5.4.1/video-js.swf';
+    var player = videojs('my-player'); //my-player为页面video元素的id
+    player.play(); //播放
+    //    1. 播放   player.play()
+    //    2. 停止   player.pause()
+    //    3. 暂停   player.pause()
+</script>
+</body>
+</html>

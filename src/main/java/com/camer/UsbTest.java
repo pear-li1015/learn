@@ -16,9 +16,12 @@ public class UsbTest {
     private static short idVendor = (short) 0x045E;
     private static short idProduct = (short) 0x028E;
 
-    public static void main(String[] args) {
-//        test1();
-        test2();
+    public static void main(String[] args) throws Exception {
+        UsbServices sss = UsbHostManager.getUsbServices();
+//        int a  = 10;
+//        int c = a+ 10;
+        test1();
+//        test3();
     }
 
     public static void test3() {

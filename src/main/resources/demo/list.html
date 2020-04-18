@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+<body>
+<table class="table table-striped">
+    <thead>
+    <tr id="my_thead">
+    </tr>
+    </thead>
+    <tbody id="my_table_body">
+    </tbody>
+</table>
+<script type="text/javascript">
+
+    window.onload = function () {
+        table();
+    };
+
+    // 渲染table
+    function table() {
+        var thead = ["id", "bcd", "def"];
+        var tbody = [["abc1", "bcd", "def"], ["abc2", "bcd", "def"]];
+        thead.forEach((item => {
+            $("#my_thead").append("<th>" + item + "</th>");
+        }));
+        $("#my_thead").append("<th>操作</th>");
+        tbody.forEach((row => {
+            var aRow = "";
+            aRow += "<tr>";
+            row.forEach((item) => {
+                aRow += "<td>" + item + "</td>";
+            });
+            aRow += "<td><button id='btn" + row[0] + "' class='btn btn-info'>修改</button></td>";
+            aRow += "</tr>";
+            $("#my_table_body").append(aRow);
+            // 修改按钮点击事件
+            $("#btn" + row[0]).bind("click", function() {
+                console.log(row[0]);
+                console.log("=========");
+            });
+        }));
+    }
+</script>
+</body>
+</html>
